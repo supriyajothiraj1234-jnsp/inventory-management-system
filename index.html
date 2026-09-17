@@ -3,61 +3,486 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Inventory Management System</title>
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        header {
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        nav {
+            background: #1e293b;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin: 0 15px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 90%;
+            margin: 25px auto;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h2 {
+            color: #1e293b;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 180px;
+            background: #eef2ff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        form {
+            max-width: 500px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #search {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .low {
+            color: red;
+            font-weight: bold;
+        }
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+            table {
+                font-size: 12px;
+            }
+
+            .container {
+                width: 95%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-    <h1>📦 Inventory Management System</h1>
-    <p>Simple Inventory Management</p>
+    <h1>Inventory Management System</h1>
+    <p>Manage Products and Stock Easily</p>
 </header>
 
 <nav>
-    <a href="index.html">Dashboard</a>
-    <a href="products.html">Products</a>
-    <a href="add-product.html">Add Product</a>
+    <button onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="showPage('add')">Add Product</button>
+    <button onclick="showPage('inventory')">Inventory</button>
 </nav>
 
 <div class="container">
 
-    <h2>Dashboard</h2>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="page active">
 
-    <div class="cards">
+        <h2>Dashboard</h2>
 
-        <div class="card">
-            <h3>Total Products</h3>
-            <p id="totalProducts">0</p>
-        </div>
+        <div class="cards">
 
-        <div class="card">
-            <h3>Total Stock</h3>
-            <p id="totalStock">0</p>
-        </div>
+            <div class="card">
+                <h3>Total Products</h3>
+                <p id="totalProducts">0</p>
+            </div>
 
-        <div class="card">
-            <h3>Low Stock</h3>
-            <p id="lowStock">0</p>
-        </div>
+            <div class="card">
+                <h3>Total Stock</h3>
+                <p id="totalStock">0</p>
+            </div>
 
-        <div class="card">
-            <h3>Categories</h3>
-            <p id="categories">0</p>
+            <div class="card">
+                <h3>Low Stock</h3>
+                <p id="lowStock">0</p>
+            </div>
+
         </div>
 
     </div>
 
-    <h2>Inventory Overview</h2>
 
-    <p>
-        This system helps users manage products, stock quantity,
-        price, category and supplier information easily.
-    </p>
+    <!-- ADD PRODUCT -->
+    <div id="add" class="page">
+
+        <h2>Add Product</h2>
+
+        <form id="productForm">
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Product Name"
+                required
+            >
+
+            <input
+                type="text"
+                id="category"
+                placeholder="Category"
+                required
+            >
+
+            <input
+                type="number"
+                id="quantity"
+                placeholder="Quantity"
+                min="0"
+                required
+            >
+
+            <input
+                type="number"
+                id="price"
+                placeholder="Price"
+                min="0"
+                required
+            >
+
+            <input
+                type="text"
+                id="supplier"
+                placeholder="Supplier Name"
+                required
+            >
+
+            <button class="add-btn" type="submit">
+                Add Product
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- INVENTORY -->
+    <div id="inventory" class="page">
+
+        <h2>Inventory List</h2>
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search Product..."
+            onkeyup="searchProduct()"
+        >
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Supplier</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="productTable"></tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
-<script src="script.js"></script>
+
+<script>
+
+    let products = [];
+
+    /* Change Page */
+
+    function showPage(pageId) {
+
+        let pages = document.querySelectorAll(".page");
+
+        pages.forEach(function(page) {
+            page.classList.remove("active");
+        });
+
+        document.getElementById(pageId)
+                .classList.add("active");
+
+        displayProducts();
+    }
+
+
+    /* Add Product */
+
+    document.getElementById("productForm")
+        .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        let product = {
+
+            id: products.length + 1,
+
+            name:
+                document.getElementById("productName").value,
+
+            category:
+                document.getElementById("category").value,
+
+            quantity:
+                Number(document.getElementById("quantity").value),
+
+            price:
+                Number(document.getElementById("price").value),
+
+            supplier:
+                document.getElementById("supplier").value
+        };
+
+        products.push(product);
+
+        displayProducts();
+
+        updateDashboard();
+
+        document.getElementById("productForm").reset();
+
+        alert("Product added successfully!");
+
+        showPage("inventory");
+    });
+
+
+    /* Display Products */
+
+    function displayProducts(list = products) {
+
+        let table =
+            document.getElementById("productTable");
+
+        table.innerHTML = "";
+
+        list.forEach(function(product) {
+
+            let status =
+                product.quantity < 10
+                ? '<span class="low">Low Stock</span>'
+                : '<span class="available">Available</span>';
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>${product.id}</td>
+
+                    <td>${product.name}</td>
+
+                    <td>${product.category}</td>
+
+                    <td>${product.quantity}</td>
+
+                    <td>₹${product.price}</td>
+
+                    <td>${product.supplier}</td>
+
+                    <td>${status}</td>
+
+                    <td>
+                        <button
+                            class="delete-btn"
+                            onclick="deleteProduct(${product.id})">
+                            Delete
+                        </button>
+                    </td>
+
+                </tr>
+            `;
+        });
+
+        updateDashboard();
+    }
+
+
+    /* Delete Product */
+
+    function deleteProduct(id) {
+
+        if (confirm("Do you want to delete this product?")) {
+
+            products = products.filter(function(product) {
+
+                return product.id !== id;
+
+            });
+
+            displayProducts();
+        }
+    }
+
+
+    /* Search Product */
+
+    function searchProduct() {
+
+        let value =
+            document.getElementById("search")
+            .value
+            .toLowerCase();
+
+        let result = products.filter(function(product) {
+
+            return (
+                product.name.toLowerCase().includes(value) ||
+                product.category.toLowerCase().includes(value) ||
+                product.supplier.toLowerCase().includes(value)
+            );
+
+        });
+
+        displayProducts(result);
+    }
+
+
+    /* Dashboard */
+
+    function updateDashboard() {
+
+        document.getElementById("totalProducts")
+            .innerText = products.length;
+
+        let stock = products.reduce(
+            function(total, product) {
+                return total + product.quantity;
+            }, 0
+        );
+
+        document.getElementById("totalStock")
+            .innerText = stock;
+
+        let low = products.filter(function(product) {
+
+            return product.quantity < 10;
+
+        }).length;
+
+        document.getElementById("lowStock")
+            .innerText = low;
+    }
+
+
+    /* Initial Display */
+
+    displayProducts();
+    updateDashboard();
+
+</script>
 
 </body>
 </html>
